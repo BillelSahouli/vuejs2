@@ -2,20 +2,19 @@
   <v-card>
     <v-card-title>
       Nutrition
-      <v-spacer></v-spacer>
-      <v-text-field
-        v-model="search"
-        append-icon="mdi-magnify"
-        label="Search"
-        single-line
-        hide-details
-      ></v-text-field>
     </v-card-title>
     <v-data-table
       :headers="headers"
       :items="desserts"
       :search="search"
-    ></v-data-table>
+    >
+    <template v-slot:header.name='{ header }'>
+      <v-text-field v-model="name" type="text" label="Dessert name"></v-text-field>
+    </template>
+    <template v-slot:header.calories='{ header }'>
+      <v-text-field v-model="calories" type="text" label="Calorie"></v-text-field>
+    </template>
+  </v-data-table>
   </v-card>
 </template>
 
@@ -26,14 +25,19 @@ export default {
   data () {
     return {
       search: '',
+      name: '',
+      calories: '',
+      fat: '',
+      carbs: '',
       headers: [
         {
           text: 'Dessert (100g serving)',
           align: 'start',
           sortable: false,
-          value: 'name'
+          value: 'name',
+          filter: filter => { return (filter + '').toLowerCase().includes(this[ 'name' ].toLowerCase()) }
         },
-        { text: 'Calories', value: 'calories' },
+        { text: 'Calories', value: 'calories', filter: filter => { return (filter + '').includes(this[ 'calories' ]) } },
         { text: 'Fat (g)', value: 'fat' },
         { text: 'Carbs (g)', value: 'carbs' },
         { text: 'Protein (g)', value: 'protein' },
@@ -121,6 +125,11 @@ export default {
           iron: '6%'
         }
       ]
+    }
+  },
+  methods: {
+    ssss (value, search, item) {
+      console.log(this.headers)
     }
   }
 }
